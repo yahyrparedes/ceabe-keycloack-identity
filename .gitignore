@@ -1,5 +1,4 @@
 # Folder Postgress
 
-postgres_data/
-ceabe-front-auth/
+postgres_data/ 
 ceabe-service-auth/
