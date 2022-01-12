@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {NgbConfig} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +13,8 @@ export class AppComponent {
   isAdmin: boolean;
   token: string;
 
-  constructor(ngbConfig: NgbConfig) {
-    ngbConfig.animation = false;
+  constructor() {
+
   }
 
 
