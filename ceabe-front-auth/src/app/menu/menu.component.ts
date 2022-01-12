@@ -1,5 +1,4 @@
-import { LoginService } from './../services/login.service';
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 @Component({
   selector: 'app-menu',
@@ -13,17 +12,11 @@ export class MenuComponent implements OnInit {
   @Input() username: string;
 
 
-  constructor(private loginService: LoginService) { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
-  public login(): void {
-    this.loginService.login();
-  }
-
-  public logout(): void {
-    this.loginService.logout();
-  }
 
 }
