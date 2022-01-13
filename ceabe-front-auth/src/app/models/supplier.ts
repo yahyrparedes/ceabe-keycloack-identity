@@ -12,7 +12,7 @@ import {required, maxLength, minLength, email, numeric, NumericValueType, prop} 
 import {Constants} from "../utils/constants";
 
 export class Supplier {
-  businessName: string
+  businessName: string = ""
   taxpayerStatus: string
   taxpayerType: string
   taxpayerCondition: string

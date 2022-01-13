@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+// import { RecaptchaModule } from "ng-recaptcha";
 
 
 import {AppComponent} from './app.component';
@@ -23,6 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     FormsModule,
     NgbModule,
+    // RecaptchaModule
   ],
   providers: [RxFormBuilder],
   bootstrap: [AppComponent]

@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit {
 
   ruc: string;
   loading: boolean;
-  supplier: Supplier;
+  supplier: Supplier = new Supplier();
   categoryList: Category[] = [];
   categorySelect: Category[] = [];
   formGroup: FormGroup;
@@ -32,11 +32,11 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.searchRUC("10738840718");
-
     let formSupplier = new FormSupplier();
+
     this.formGroup = this.rxFormBuilder.formGroup(formSupplier);
     this.loadCategoryList();
+    // this.searchRUC("10738840718");
 
   }
 
@@ -77,17 +77,16 @@ export class SignupComponent implements OnInit {
     // );
   }
 
-  searchRUC() {
-    if (this.ruc == null || this.ruc.toString().length != 11) {
+  searchRUC(ruc: string) {
+    if (ruc == null || ruc.toString().length < 11) {
       console.log('error', 'CEABE', 'Se debe ingresar un RUC válido');
     } else {
+      this.ruc = ruc;
       this.loading = true;
-      this.userService.searchByRUC(this.ruc).subscribe((dataItem) => {
+      this.userService.searchByRUC(ruc).subscribe((dataItem) => {
         if (dataItem.codigo >= 1) {
-          this.supplier = new Supplier();
           this.supplier.businessName = dataItem.dato.razonSocial
         } else {
-          this.supplier = new Supplier();
           console.log('error', 'CEABE', dataItem.msj);
         }
         this.loading = false;
@@ -110,6 +109,14 @@ export class SignupComponent implements OnInit {
 
   volver(): void {
     this.router.navigate(['/']);
+  }
+
+  showResponse(event) {
+    if (event.response.length > 0) {
+      this.captcha = true;
+    } else {
+      this.captcha = false;
+    }
   }
 
   expireCaptchaShow(event) {

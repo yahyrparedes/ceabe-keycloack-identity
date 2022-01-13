@@ -1,5 +1,5 @@
 <section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark"
-  style="min-height: 100vh; background-size: cover; background-image: url(https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1920&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=c0d43804e2c7c93143fe8ff65398c8e9);">
+         style="min-height: 100vh; background-size: cover; background-image: url(https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1920&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=c0d43804e2c7c93143fe8ff65398c8e9);">
   <div class="container-fluid">
     <div class="row  justify-content-center align-items-center d-flex-row  h-100">
       <div class="col-12 col-md-4 col-lg-8">
@@ -10,21 +10,24 @@
               <div class="row">
                 <div class="col col-lg-6">
                   <div class="d-flex align-items-center">
-                    <input  maxlength="11" [(ngModel)]="ruc" class="form-control mr-3" placeholder="Ruc del Proveedor" type="text">
-                    <button type="submit" (click)="searchRUC()" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Validar RUC
+                    <input maxlength="11" #ruc class="form-control mr-3" placeholder="RUC del Proveedor" type="text">
+                    <button type="submit" (click)="searchRUC(ruc.value)" class="btn btn-primary btn-block"><i
+                      class="fa fa-search"></i> Validar RUC
                     </button>
                   </div>
                 </div>
               </div>
               <hr>
               <div class="form-group input-group">
-                <input name="" class="form-control" placeholder="Razón social" type="text">
+                <input name="" [value]="supplier.businessName" class="form-control" placeholder="Razón social"
+                       type="text">
               </div>
               <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
                 <ngb-panel>
                   <ng-template ngbPanelTitle>
                     <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex mx-2"><i style="font-weight: bold; color: #1c2128;" class="fa fa-angle-down"></i>
+                      <div class="d-flex mx-2"><i style="font-weight: bold; color: #1c2128;"
+                                                  class="fa fa-angle-down"></i>
                       </div>
                       <div class="d-flex" style="font-weight: bold; color: #1c2128;">Categorias</div>
                     </div>
@@ -121,7 +124,8 @@
                 <ngb-panel>
                   <ng-template ngbPanelTitle>
                     <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex mx-2"><i style="font-weight: bold; color: #1c2128;" class="fa fa-angle-down"></i>
+                      <div class="d-flex mx-2"><i style="font-weight: bold; color: #1c2128;"
+                                                  class="fa fa-angle-down"></i>
                       </div>
                       <div class="d-flex" style="font-weight: bold; color: #1c2128;">Datos del Usuario</div>
                     </div>
@@ -159,10 +163,11 @@
                 <ngb-panel>
                   <ng-template ngbPanelTitle>
                     <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex mx-2"><i style="font-weight: bold; color: #1c2128;" class="fa fa-angle-down"></i>
+                      <div class="d-flex mx-2"><i style="font-weight: bold; color: #1c2128;"
+                                                  class="fa fa-angle-down"></i>
                       </div>
                       <div class="d-flex mr-4" style="font-weight: bold; color: #1c2128;">Representante</div>
-                      <button type="submit" class="btn btn-primary btn-block">Agregar nuevo </button>
+                      <button type="submit" class="btn btn-primary btn-block">Agregar nuevo</button>
                     </div>
                   </ng-template>
                   <ng-template ngbPanelContent>
@@ -229,10 +234,15 @@
                   </ng-template>
                 </ngb-panel>
               </ngb-accordion>
+              <!--              <re-captcha (resolved)="showResponse($event)" siteKey="6Lcz1xIdAAAAALCm7x_AWRKAykjLzYKgTQJ0Xjej" ></re-captcha>-->
+              <!--              <div  class="g-recaptcha" data-sitekey="6Lcz1xIdAAAAALCm7x_AWRKAykjLzYKgTQJ0Xjej"-->
+              <!--                         (onExpire)="expireCaptchaShow($event)"-->
+              <!--                    (onResponse)="showResponse($event)"></div>-->
+
               <br>
               <div class="row">
                 <div class="col">
-                  <button type="submit" class="btn btn-primary btn-block">Registrar </button>
+                  <button type="submit" class="btn btn-primary btn-block">Registrar</button>
                 </div>
               </div>
             </form>
