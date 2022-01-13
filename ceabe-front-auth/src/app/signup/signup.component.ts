@@ -96,11 +96,12 @@ export class SignupComponent implements OnInit {
 
   loadCategoryList() {
     this.userService.getCategoryList({}).subscribe((dataItem) => {
+      console.log(dataItem)
       if (dataItem.codigo >= 1) {
         dataItem.dato.forEach((item) => {
           this.categoryList.push(new Category(item.id, item.nombre, item.total))
         });
-        this.categoryList = dataItem.dato;
+        // this.categoryList = dataItem.dato;
       } else {
         console.log('error', 'CEABE', 'Se produjo un error');
       }
