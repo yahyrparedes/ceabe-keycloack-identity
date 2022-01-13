@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
   // lastName: string;
   // password: string;
 
-  ruc: string = "";
+  ruc: string;
   loading: boolean;
   supplier: Supplier;
   categoryList: Category[] = [];

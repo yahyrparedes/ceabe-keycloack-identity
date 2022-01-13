@@ -9,6 +9,7 @@ import {MenuComponent} from './menu/menu.component';
 import {SignupComponent} from './signup/signup.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {RxFormBuilder} from "@rxweb/reactive-form-validators";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {RxFormBuilder} from "@rxweb/reactive-form-validators";
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    NgbModule,
   ],
   providers: [RxFormBuilder],
   bootstrap: [AppComponent]

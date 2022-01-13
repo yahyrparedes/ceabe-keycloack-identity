@@ -10,14 +10,11 @@
               <div class="row">
                 <div class="col col-lg-6">
                   <div class="d-flex align-items-center">
-                    <input name="" class="form-control mr-3" placeholder="Ruc del Proveedor" type="text">
-                    <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Validar RUC
+                    <input  maxlength="11" [(ngModel)]="ruc" class="form-control mr-3" placeholder="Ruc del Proveedor" type="text">
+                    <button type="submit" (click)="searchRUC()" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Validar RUC
                     </button>
                   </div>
                 </div>
-
-
-
               </div>
               <hr>
               <div class="form-group input-group">
