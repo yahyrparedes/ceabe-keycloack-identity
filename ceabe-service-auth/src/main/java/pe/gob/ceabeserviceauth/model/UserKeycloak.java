@@ -6,8 +6,8 @@ public class UserKeycloak implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
-    private String username; // ruc
-    private String email; // email
+    private String username;
+    private String email;
     private String firstName;
     private String lastName;
     private String password;

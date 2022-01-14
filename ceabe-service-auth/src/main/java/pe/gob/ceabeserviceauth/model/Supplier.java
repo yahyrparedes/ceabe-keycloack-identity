@@ -30,6 +30,10 @@ public class Supplier implements Serializable {
     @Column
     public List<Category> categories;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @Column
+    public List<Contact> contacts;
+
 
     public Supplier() {
 
@@ -97,5 +101,13 @@ public class Supplier implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 }
