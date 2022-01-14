@@ -33,7 +33,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
 //                .antMatchers("/books").hasAnyRole("Member", "Librarian")
 //                .antMatchers("/manager").hasRole("Librarian")
                 .anyRequest().permitAll();
-//        http.csrf().disable();
+        http.csrf().disable();
     }
 
 

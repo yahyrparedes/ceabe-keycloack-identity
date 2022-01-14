@@ -11,8 +11,8 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pe.gob.ceabeserviceauth.dto.ResponseMessage;
-import pe.gob.ceabeserviceauth.model.User;
+import pe.gob.ceabeserviceauth.dto.ResponseKeycloak;
+import pe.gob.ceabeserviceauth.model.UserKeycloak;
 
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
@@ -26,44 +26,46 @@ public class KeycloakService {
     @Value("${keycloak.realm}")
     private String realm;
 
-    public Object[] createUser(User user) {
-        ResponseMessage message = new ResponseMessage();
-        int statusId = 0;
+    public ResponseKeycloak createUser(UserKeycloak userKeycloak) {
+        ResponseKeycloak responseKeycloak = new ResponseKeycloak();
+        responseKeycloak.setSuccess(false);
         try {
             UsersResource usersResource = getUsersResource();
             UserRepresentation userRepresentation = new UserRepresentation();
-            userRepresentation.setUsername(user.getUsername());
-            userRepresentation.setEmail(user.getEmail());
-            userRepresentation.setFirstName(user.getFirstName());
-            userRepresentation.setLastName(user.getLastName());
+            userRepresentation.setUsername(userKeycloak.getUsername());
+            userRepresentation.setEmail(userKeycloak.getEmail());
+            userRepresentation.setFirstName(userKeycloak.getFirstName());
+            userRepresentation.setLastName(userKeycloak.getLastName());
             userRepresentation.setEnabled(true);
 
-            Response result = usersResource.create(userRepresentation);
-            statusId = result.getStatus();
 
-            if (statusId == 201) {
+            Response result = usersResource.create(userRepresentation);
+            responseKeycloak.setStatus(result.getStatus());
+
+            if (responseKeycloak.getStatus() == 201) {
                 String path = result.getLocation().getPath();
-                String userId = path.substring(path.lastIndexOf("/") + 1);
+                responseKeycloak.setId(path.substring(path.lastIndexOf("/") + 1));
                 CredentialRepresentation passwordCredential = new CredentialRepresentation();
                 passwordCredential.setTemporary(false);
                 passwordCredential.setType(CredentialRepresentation.PASSWORD);
-                passwordCredential.setValue(user.getPassword());
-                usersResource.get(userId).resetPassword(passwordCredential);
+                passwordCredential.setValue(userKeycloak.getPassword());
+                usersResource.get(responseKeycloak.getId()).resetPassword(passwordCredential);
 
                 RealmResource realmResource = getRealmResource();
                 RoleRepresentation roleRepresentation = realmResource.roles().get("realm-user").toRepresentation();
-                realmResource.users().get(userId).roles().realmLevel().add(Arrays.asList(roleRepresentation));
-                message.setMessage("usuario creado con éxito");
-            } else if (statusId == 409) {
-                message.setMessage("ese usuario ya existe");
+                realmResource.users().get(responseKeycloak.getId()).roles().realmLevel().add(Arrays.asList(roleRepresentation));
+                responseKeycloak.setMessage("usuario creado con éxito");
+                responseKeycloak.setSuccess(true);
+            } else if (responseKeycloak.getStatus() == 409) {
+                responseKeycloak.setMessage("ese usuario ya existe");
             } else {
-                message.setMessage("error creando el usuario");
+                responseKeycloak.setMessage("error creando el usuario");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new Object[]{statusId, message};
+        return responseKeycloak;
     }
 
     private RealmResource getRealmResource() {

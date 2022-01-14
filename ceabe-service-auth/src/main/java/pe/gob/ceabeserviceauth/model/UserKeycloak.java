@@ -2,18 +2,30 @@ package pe.gob.ceabeserviceauth.model;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class UserKeycloak implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
-    private String username;
-    private String email;
+    private String username; // ruc
+    private String email; // email
     private String firstName;
     private String lastName;
     private String password;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+//    "ruc": "10738840718", //username
+//    "razonSocial": "PAREDES ARTEAGA YAHYR ENRIQUE",
+//    "correo": "demo@assdas.co",
+//    "representante": "sasdf",
+//    "telefono": "132546897",
+//    "celular": "321546789"
+
+
+    public UserKeycloak(String username, String email, String firstName, String lastName, String password) {
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
     }
 
     public String getUsername() {
