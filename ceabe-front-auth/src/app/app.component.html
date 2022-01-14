@@ -1,3 +1,50 @@
-<app-menu [isLogged]="isLogged" [isAdmin]="isAdmin" [username]="username"></app-menu>
+<!--<app-menu [isLogged]="isLogged" [isAdmin]="isAdmin" [username]="username"></app-menu>-->
+<div class="ribbonHead shadow-4">
+  <div class="grid ">
+    <div class="xl:col-2 lg:col-2 md:col-12 sm:col-12 col-12">
+      <img src="assets/img/logo.png" class="img link"/>
+    </div>
+    <div class="xl:col-4 lg:col-4 md:col-12 sm:col-12 col-12 text-center">
+      <!--      <div class="p-component tittle">Registro de proveedores</div>-->
+    </div>
+    <div class="xl:col-4 lg:col-4 md:col-12 sm:col-12 col-12 text-right">
 
-<router-outlet></router-outlet>
+    </div>
+    <div class="xl:col-2 lg:col-2 md:col-12 sm:col-12 col-12 text-right">
+      <img src="assets/img/Logo-Ceabe-Aprobado-2.png" class="img">
+    </div>
+  </div>
+</div>
+
+<div class="container">
+      <router-outlet></router-outlet>
+</div>
+
+<div class="ribbonFooter">
+  <div class="ribbonFooterContainer">
+    <div class="grid text-center">
+      <div class="xl:col-1 lg:col-1 md:col-4 sm:col-12 col-12 table border">
+        <img src="assets/img/escudo.png" class="img"/>
+      </div>
+      <div class="xl:col-1 lg:col-1 md:col-4 sm:col-12 col-12 table border">
+        <div class="p-component text-sm">Gobierno <br>del Perú</div>
+      </div>
+      <div class="xl:col-2 lg:col-2 md:col-4 sm:col-12 col-12 table border">
+        <div class="p-component text-sm">Ministerio de Trabajo<br>y Promoción del Empleo</div>
+      </div>
+      <div class="xl:col-2 lg:col-2 md:col-4 sm:col-12 col-12 table border">
+        <div class="p-component text-sm">Seguro Social de Salud<br>EsSalud</div>
+      </div>
+
+      <div class="xl:col-2 lg:col-2 md:col-4 sm:col-12 col-12 table border">
+        <div class="p-component text-sm font-bold">www.essalud.gob.pe</div>
+      </div>
+      <div class="xl:col-4 lg:col-3 md:col-4 sm:col-12 col-12 table">
+        <div class="p-component text-sm">Sede Central: Av. Arenales N° 1402<br>
+          Jesús María, Lima 11 – Perú<br>
+          Teléfonos: (511)265-6000 / (511) 265-7000
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

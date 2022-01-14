@@ -1,4 +1,3 @@
-import {User} from './../models/user';
 import {UserService} from './../services/user.service';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
@@ -6,46 +5,42 @@ import {FormSupplier, Supplier} from "../models/supplier";
 import {Category} from "../models/category";
 import {FormGroup} from "@angular/forms";
 import {RxFormBuilder} from "@rxweb/reactive-form-validators";
+import {DialogService} from "primeng/dynamicdialog";
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-
-  // username: string;
-  // email: string;
-  // firstName: string;
-  // lastName: string;
-  // password: string;
 
   ruc: string;
   loading: boolean;
   supplier: Supplier = new Supplier();
   categoryList: Category[] = [];
   categorySelect: Category[] = [];
-  formGroup: FormGroup;
+  fg: FormGroup;
   captcha: boolean = false;
 
-  constructor(private userService: UserService, private router: Router, private rxFormBuilder: RxFormBuilder,) {
+  constructor(private userService: UserService, private router: Router,
+              private rxFormBuilder: RxFormBuilder, private dialogService: DialogService,) {
   }
 
   ngOnInit(): void {
     let formSupplier = new FormSupplier();
 
-    this.formGroup = this.rxFormBuilder.formGroup(formSupplier);
+    this.fg = this.rxFormBuilder.formGroup(formSupplier);
     this.loadCategoryList();
     // this.searchRUC("10738840718");
 
   }
 
   onRegisterSupplier(): void {
-    console.log(this.formGroup.value)
+    console.log(this.fg.value)
 
     if (!this.captcha) {
       console.log('error', 'CEABE', 'Se debe validar el captcha para registrarse.');
-    } else if (!this.formGroup.valid) {
+    } else if (!this.fg.valid) {
       console.log('error', 'CEABE', 'Se deben proporcionar todos los campos requeridos.');
     } else if (this.supplier.businessName == null || this.supplier.businessName.length == 0) {
       console.log('error', 'CEABE', 'Se debe buscar un ruc.');
@@ -53,11 +48,11 @@ export class SignupComponent implements OnInit {
       console.log('error', 'CEABE', 'Se deben seleccionar categorias.');
     } else {
       this.loading = true;
-      this.formGroup.value.ruc = this.ruc
-      this.formGroup.value.businessName = this.supplier.businessName
-      this.formGroup.value.category = this.categorySelect
-      console.log(this.formGroup.value)
-      this.userService.registerSupplier(this.formGroup.value).subscribe(
+      this.fg.value.ruc = this.ruc
+      this.fg.value.businessName = this.supplier.businessName
+      this.fg.value.category = this.categorySelect
+      console.log(this.fg.value)
+      this.userService.registerSupplier(this.fg.value).subscribe(
         data => {
           console.log(data);
           this.volver();

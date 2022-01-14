@@ -1,0 +1,58 @@
+:host {
+  .table {
+    display: table;
+    div {
+      display: table-cell;
+      justify-content: center;
+      vertical-align: middle;
+    }
+  }
+
+  .ribbonHead {
+    background-color: #285698;
+    color: white;
+    .img {
+      height:40px;
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+    .img.link {
+      cursor:pointer;
+    }
+    .round {
+      border-radius: 5px;
+    }
+    .tittle {
+      font-size: 2.2rem;
+    }
+  }
+
+  .ribbonFooter {
+    border-top: 5px solid #285698;
+    background-color: #e8e7e7;
+    box-sizing: border-box;
+    .ribbonFooterContainer {
+      max-width: 1100px;
+      display: block;
+      margin: 0 auto;
+      margin-top: 10px;
+      padding-bottom: 10px;
+    }
+    .img {
+      height: 63px;
+      display: block;
+      margin: 0 auto;
+    }
+    .p-component {
+      color: #7a7a7a;
+    }
+    .tittle {
+      color: #54595f;
+    }
+    .border {
+      border-right: 1px solid #7a7a7a;
+    }
+  }
+}
+

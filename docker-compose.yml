@@ -9,6 +9,7 @@ services:
   postgres:
     image: postgres:latest
     container_name: iam-ceabe-database
+    restart: on-failure
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
@@ -20,7 +21,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: iam-ceabe-keycloak
-    restart: always
+    restart: on-failure
     environment:
       DB_VENDOR: POSTGRES
       DB_ADDR: postgres
@@ -28,8 +29,8 @@ services:
       DB_USER: keycloak
       DB_SCHEMA: public
       DB_PASSWORD: password
-      #KEYCLOAK_USER: ceabe
-      #KEYCLOAK_PASSWORD: ceabe
+      KEYCLOAK_USER: ceabe
+      KEYCLOAK_PASSWORD: ceabe
     volumes:
       - ./themes/ceabe:/opt/jboss/keycloak/themes/ceabe
     ports:
