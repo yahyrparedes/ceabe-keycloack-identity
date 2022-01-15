@@ -8,19 +8,16 @@ import {MenuComponent} from './menu/menu.component';
 import {SignupComponent} from './signup/signup.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {RxFormBuilder} from "@rxweb/reactive-form-validators";
-import {ButtonModule} from "primeng/button";
-import {DividerModule} from "primeng/divider";
-import {AccordionModule} from "primeng/accordion";
-import {CheckboxModule} from "primeng/checkbox";
-import {DialogModule} from "primeng/dialog";
-import {CardModule} from "primeng/card";
-import {CaptchaModule} from "primeng/captcha";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {RecaptchaModule} from "ng-recaptcha";
+import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    SignupComponent
+    SignupComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
@@ -28,13 +25,8 @@ import {CaptchaModule} from "primeng/captcha";
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    ButtonModule,
-    DividerModule,
-    AccordionModule,
-    CheckboxModule,
-    DialogModule,
-    CardModule,
-    CaptchaModule,
+    NgbModule,
+    RecaptchaModule
   ],
   providers: [RxFormBuilder],
   bootstrap: [AppComponent]

@@ -5,7 +5,8 @@ import {FormSupplier, Supplier} from "../models/supplier";
 import {Category} from "../models/category";
 import {FormGroup} from "@angular/forms";
 import {RxFormBuilder} from "@rxweb/reactive-form-validators";
-import {DialogService} from "primeng/dynamicdialog";
+import {RecaptchaErrorParameters} from "ng-recaptcha";
+import {Contact} from "../models/contact";
 
 @Component({
   selector: 'app-signup',
@@ -14,16 +15,19 @@ import {DialogService} from "primeng/dynamicdialog";
 })
 export class SignupComponent implements OnInit {
 
+  activeIds: string[] = ['categories', 'supplier', 'representative'];
+
   ruc: string;
   loading: boolean;
   supplier: Supplier = new Supplier();
   categoryList: Category[] = [];
   categorySelect: Category[] = [];
+  contacts: Contact[] = [new Contact(), ]
   fg: FormGroup;
   captcha: boolean = false;
 
   constructor(private userService: UserService, private router: Router,
-              private rxFormBuilder: RxFormBuilder, private dialogService: DialogService,) {
+              private rxFormBuilder: RxFormBuilder) {
   }
 
   ngOnInit(): void {
@@ -119,4 +123,20 @@ export class SignupComponent implements OnInit {
     this.captcha = false;
   }
 
+  public resolved(captchaResponse: string): void {
+    console.log(`Resolved captcha with response: ${captchaResponse}`);
+  }
+
+  public onError(errorDetails: RecaptchaErrorParameters): void {
+    console.log(`reCAPTCHA error encountered; details:`, errorDetails);
+  }
+
+  openAll() {
+    this.activeIds = ['categories', 'supplier', 'representative'];
+    console.log(this.activeIds);
+  }
+
+  addContact() {
+    this.contacts.push(new Contact())
+  }
 }
