@@ -1,11 +1,11 @@
 export class Category {
-  private id: number;
-  private name: string;
-  private amount: number;
+  public code: number;
+  public name: string;
+  public amount: number;
 
-  constructor(id: number, name: string, amount: number) {
+  constructor(code: number, name: string, amount: number) {
     this.name = name;
-    this.id = id;
+    this.code = code;
     this.amount = amount;
   }
 

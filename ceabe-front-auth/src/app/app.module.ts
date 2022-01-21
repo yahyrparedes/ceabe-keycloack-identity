@@ -10,14 +10,18 @@ import {AppRoutingModule} from "./app-routing.module";
 import {RxFormBuilder} from "@rxweb/reactive-form-validators";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {RecaptchaModule} from "ng-recaptcha";
-import { ContactComponent } from './contact/contact.component';
+import {ContactComponent} from './contact/contact.component';
+import {OAuthModule} from "angular-oauth2-oidc";
+import {environment} from "../environments/environment";
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     SignupComponent,
-    ContactComponent
+    ContactComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,13 @@ import { ContactComponent } from './contact/contact.component';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    RecaptchaModule
+    RecaptchaModule,
+    OAuthModule.forRoot({
+      resourceServer: {
+        allowedUrls: [environment.url, environment.service],
+        sendAccessToken: true
+      }
+    })
   ],
   providers: [RxFormBuilder],
   bootstrap: [AppComponent]

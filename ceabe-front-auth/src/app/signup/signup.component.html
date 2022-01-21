@@ -6,22 +6,31 @@
         <div class="card shadow">
           <div class="card-body">
             <h4 class="card-title mt-3 mb-5 text-center">Registro Proveedores</h4>
-            <form>
-              <div class="row">
-                <div class="col col-lg-6">
-                  <div class="d-flex align-items-center">
-                    <input maxlength="11" #ruc class="form-control mr-3" placeholder="RUC del Proveedor" type="text">
-                    <button type="submit" (click)="searchRUC(ruc.value)" class="btn btn-primary btn-block"><i
-                      class="fa fa-search"></i> Validar RUC
-                    </button>
-                  </div>
+
+            <div class="row">
+              <div class="col col-lg-6">
+                <div class="d-flex align-items-center">
+                  <input name="ruc" class="form-control mr-3"
+                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                         placeholder="RUC del Proveedor"
+                         [ngClass]="{ 'is-invalid' :   rucError.status }"
+                         #ruc type="number" pattern="/^\d+$/" maxlength="11">
+                  <button type="submit" (click)="searchRUC(ruc.value)" class="btn btn-primary btn-block"><i
+                    class="fa fa-search"></i> Validar RUC
+                  </button>
                 </div>
               </div>
-              <hr>
-              <div class="form-group input-group">
-                <input name="" [value]="supplier.businessName" class="form-control" placeholder="Razón social"
-                       type="text">
-              </div>
+            </div>
+            <hr>
+
+            <div class="form-group input-group">
+              <input name="" [value]="businessName" class="form-control" disabled placeholder="Razón social"
+                     type="text">
+            </div>
+            <ngb-alert [type]="'danger'" *ngIf="rucError.status" [dismissible]="false">
+              <strong>{{rucError.title}}</strong> {{rucError.message}}
+            </ngb-alert>
+            <form (ngSubmit)="onRegisterSupplier()" [formGroup]="formSupplier">
               <ngb-accordion #acc="ngbAccordion" [activeIds]="activeIds[0]">
                 <ngb-panel [id]="activeIds[0]">
                   <ng-template ngbPanelTitle>
@@ -34,19 +43,22 @@
                   </ng-template>
                   <ng-template ngbPanelContent>
                     <div class="row">
-                      <div class="col">
-                        <div class="form-check" *ngFor="let category of categoryList">
-                          <input class="form-check-input" type="checkbox" value="">
+                      <div class="col-4" *ngFor="let category of categoryList; let i=index">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" [value]="category.code"
+                                 [name]="category.name" (change)="onCategoryChange($event)">
                           <label class="form-check-label">
-                            {{  category['name'] }}
+                            {{  category.name }}
                           </label>
                         </div>
                       </div>
+<!--                      <ngb-alert [type]="'danger'" *ngIf="rucError.status" [dismissible]="false">-->
+<!--                        <strong>{{rucError.title}}</strong> {{rucError.message}}-->
+<!--                      </ngb-alert>-->
                     </div>
                   </ng-template>
                 </ngb-panel>
               </ngb-accordion>
-
               <br>
               <ngb-accordion #acc="ngbAccordion" [activeIds]="activeIds[1]">
                 <ngb-panel [id]="activeIds[1]">
@@ -62,24 +74,32 @@
                     <div class="row">
                       <div class="col">
                         <div class="form-group input-group">
-                          <input name="" class="form-control" placeholder="Correo electrónico" type="text">
+                          <input formControlName="email" class="form-control" placeholder="Correo electrónico"
+                                 [ngClass]="{ 'is-invalid' : f.email.errors &&  f.email.value != '' }" type="text">
+
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group input-group">
-                          <input name="" class="form-control" placeholder="Representante legal" type="text">
+                          <input formControlName="representative" class="form-control" placeholder="Representante legal"
+                                 [ngClass]="{ 'is-invalid' : f.representative.errors && f.representative.value != '' }"
+                                 type="text">
+
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col">
                         <div class="form-group input-group">
-                          <input name="" class="form-control" placeholder="Teléfono" type="text">
+                          <input formControlName="phone" class="form-control" placeholder="Teléfono"
+                                 [ngClass]="{ 'is-invalid' : f.phone.errors  && f.phone.value != '' }" type="text">
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group input-group">
-                          <input name="" class="form-control" placeholder="Celular" type="text">
+                          <input formControlName="cellphone" class="form-control" placeholder="Celular"
+                                 [ngClass]="{ 'is-invalid' : f.cellphone.errors && f.cellphone.value != ''}"
+                                 type="text"/>
                         </div>
                       </div>
                     </div>
@@ -95,26 +115,39 @@
                                                   class="fa fa-angle-down"></i>
                       </div>
                       <div class="d-flex mr-4" style="font-weight: bold; color: #1c2128;">Representante</div>
-
                     </div>
 
                   </ng-template>
                   <ng-template ngbPanelContent>
 
-                    <app-contact *ngFor="let contact of contacts; let indice = index"
-                                 title="Contacto #{{indice}}"></app-contact>
+                    <app-contact *ngFor="let contact of contacts; let i = index"
+                                 (sendFormEmitter)="sendFormEmitter($event)"
+                                 (registerFormEmitter)="registerFormEmitter($event)"
+                                 (removeFormEmitter)="removeFormEmitter($event)"
+                                 title="Contacto #{{i+1}}" [index]="i" [contact]="contact"></app-contact>
 
-                    <button type="submit" (click)="addContact()" class="btn btn-primary btn-block">Agregar nuevo contacto</button>
+                    <button type="button" (click)="addContact()"
+                            class="btn btn-primary ">Agregar nuevo contacto
+                    </button>
                   </ng-template>
                 </ngb-panel>
               </ngb-accordion>
-              <re-captcha (resolved)="showResponse($event)" (error)="onError($event)" errorMode="handled"
-                          siteKey="6Lcz1xIdAAAAALCm7x_AWRKAykjLzYKgTQJ0Xjej"></re-captcha>
+              <br>
+              <div class="d-flex justify-content-center">
+                <re-captcha (resolved)="onSuccessCaptcha($event)" (error)="onErrorCaptcha($event)"  errorMode="handled"
+                            siteKey="6Lcz1xIdAAAAALCm7x_AWRKAykjLzYKgTQJ0Xjej"></re-captcha>
+              </div>
+
               <br>
               <div class="row">
-                <div class="col">
-                  <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                <div class="col-3"></div>
+                <div class="col-6 align-content-lg-center align-content-md-center align-items-center">
+                  <button type="submit" [disabled]="!formSupplier.valid" class="btn btn-primary btn-block btn-lg">
+                    Registrar
+                  </button>
                 </div>
+                <div class="col-3"></div>
+
               </div>
             </form>
           </div>

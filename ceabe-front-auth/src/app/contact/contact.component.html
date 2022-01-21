@@ -1,31 +1,46 @@
-<h4> {{title}}</h4>
+<div class="d-flex justify-content-between">
+<div>
+    <h4> {{title}}</h4>
+  </div>
+  <div>
+    <button type="button"  (click)="removeForm()" class="btn btn-outline-danger btn-sm">X</button>
+  </div>
+</div>
+
 <div class="group-add">
-  <div class="row">
-    <div class="col">
-      <div class="form-group input-group">
-        <input name="" class="form-control" placeholder="Nombres" type="text">
+  <form (keyup)="sendForm()" [formGroup]="formContact">
+    <div class="row">
+      <div class="col">
+        <div class="form-group input-group">
+          <input formControlName="name" class="form-control" placeholder="Nombres" type="text"
+                 [ngClass]="{ 'is-invalid' : f.name.errors && f.name.value != ''}">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group input-group">
+          <input formControlName="lastName" class="form-control" placeholder="Apellidos"
+                 [ngClass]="{ 'is-invalid' : f.lastName.errors && f.lastName.value != ''}"type="text">
+        </div>
       </div>
     </div>
-    <div class="col">
-      <div class="form-group input-group">
-        <input name="" class="form-control" placeholder="Apellidos" type="text">
+    <div class="row">
+      <div class="col">
+        <div class="form-group input-group">
+          <input  formControlName="phone" class="form-control" placeholder="Teléfono"
+                  [ngClass]="{ 'is-invalid' : f.phone.errors && f.phone.value != ''}" type="text">
+        </div>
+        <div class="form-group input-group">
+          <input formControlName="position" class="form-control" placeholder="Cargo"
+                 [ngClass]="{ 'is-invalid' : f.position.errors && f.position.value  }"type="text">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group input-group">
+          <input formControlName="email" class="form-control" placeholder="Correo"
+                 [ngClass]="{ 'is-invalid' : f.email.errors && f.email.value == ''}" type="text">
+        </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <div class="form-group input-group">
-        <input name="" class="form-control" placeholder="Teléfono" type="text">
-      </div>
-      <div class="form-group input-group">
-        <input name="" class="form-control" placeholder="Cargo" type="text">
-      </div>
-    </div>
-    <div class="col">
-      <div class="form-group input-group">
-        <input name="" class="form-control" placeholder="Correo" type="text">
-      </div>
-    </div>
-  </div>
+  </form>
 </div>
 <hr/>

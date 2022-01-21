@@ -1,134 +1,205 @@
 import {UserService} from './../services/user.service';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {FormSupplier, Supplier} from "../models/supplier";
 import {Category} from "../models/category";
-import {FormGroup} from "@angular/forms";
-import {RxFormBuilder} from "@rxweb/reactive-form-validators";
-import {RecaptchaErrorParameters} from "ng-recaptcha";
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Contact} from "../models/contact";
+import {RecaptchaErrorParameters} from "ng-recaptcha";
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
+
 export class SignupComponent implements OnInit {
 
   activeIds: string[] = ['categories', 'supplier', 'representative'];
-
-  ruc: string;
+  ruc: string = "";
+  rucError = {
+    status: false,
+    title: 'RUC erroneo:',
+    message: 'Ingrese un RUC válido'
+  }
+  businessName: string = "";
   loading: boolean;
-  supplier: Supplier = new Supplier();
   categoryList: Category[] = [];
   categorySelect: Category[] = [];
-  contacts: Contact[] = [new Contact(), ]
-  fg: FormGroup;
+  contacts: Contact[] = [new Contact(),]
   captcha: boolean = false;
+  public formSupplier: FormGroup;
 
   constructor(private userService: UserService, private router: Router,
-              private rxFormBuilder: RxFormBuilder) {
+              private formBuilder: FormBuilder,) {
   }
 
   ngOnInit(): void {
-    let formSupplier = new FormSupplier();
 
-    this.fg = this.rxFormBuilder.formGroup(formSupplier);
+    this.formSupplier = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      representative: ['', [Validators.required, Validators.minLength(3)]],
+      phone: ['', [Validators.required, Validators.minLength(3)]],
+      cellphone: ['', [Validators.required, Validators.minLength(3)]],
+      categories: new FormArray([]),
+      contacts: new FormArray([]),
+      // captcha: ['', [Validators.required]]
+    })
+
     this.loadCategoryList();
-    // this.searchRUC("10738840718");
+  }
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.formSupplier.controls;
+  }
+
+
+  addContact() {
+    this.contacts.push(new Contact())
+  }
+
+  onCategoryChange(event) {
+    const formArray: FormArray = this.formSupplier.get('categories') as FormArray;
+    if (event.target.checked) {
+      formArray.push(new FormControl(event.target.value));
+    } else {
+      let i: number = 0;
+      formArray.controls.forEach((ctrl: FormControl) => {
+        if (ctrl.value == event.target.value) {
+          formArray.removeAt(i);
+          return;
+        }
+        i++;
+      });
+    }
+  }
+
+  sendFormEmitter(event) {
+    const formArray: FormArray = this.formSupplier.get('contacts') as FormArray;
+    formArray.controls[event.value.index] = event;
+  }
+
+  registerFormEmitter(event) {
+    const formArray: FormArray = this.formSupplier.get('contacts') as FormArray;
+    formArray.push(event);
+  }
+
+  removeFormEmitter(event) {
+    const formArray: FormArray = this.formSupplier.get('contacts') as FormArray;
+
+    let i: number = 0;
+    formArray.controls.forEach((group: FormGroup) => {
+      if (group.value.index == event.value.index) {
+        formArray.removeAt(i);
+        return;
+      }
+      i++;
+    });
+
+    this.contacts.splice(i, 1);
 
   }
 
   onRegisterSupplier(): void {
-    console.log(this.fg.value)
+
+    this.categorySelect = []
+    this.formSupplier.value.categories.forEach(id => {
+      this.categorySelect.push(this.categoryList.find(cat => cat.code == id))
+    });
+    this.formSupplier.value.categories = this.categorySelect
 
     if (!this.captcha) {
       console.log('error', 'CEABE', 'Se debe validar el captcha para registrarse.');
-    } else if (!this.fg.valid) {
+    } else if (!this.formSupplier.valid) {
       console.log('error', 'CEABE', 'Se deben proporcionar todos los campos requeridos.');
-    } else if (this.supplier.businessName == null || this.supplier.businessName.length == 0) {
+    } else if (this.businessName == null || this.businessName.length == 0) {
       console.log('error', 'CEABE', 'Se debe buscar un ruc.');
     } else if (this.categorySelect.length == 0) {
       console.log('error', 'CEABE', 'Se deben seleccionar categorias.');
     } else {
-      this.loading = true;
-      this.fg.value.ruc = this.ruc
-      this.fg.value.businessName = this.supplier.businessName
-      this.fg.value.category = this.categorySelect
-      console.log(this.fg.value)
-      this.userService.registerSupplier(this.fg.value).subscribe(
+      let data = {
+        "ruc": this.ruc,
+        "businessName": this.businessName,
+        ...this.formSupplier.value
+      }
+      this.userService.registerSupplier(data).subscribe(
         data => {
-          console.log(data);
-          this.volver();
+          this.onSuccessRegister();
         },
         err => console.log(err)
       );
     }
-
-
-    // const user = new User(this.username, this.email, this.firstName, this.lastName, this.password);
-    // this.userService.create(user).subscribe(
-    //   data => {
-    //     console.log(data);
-    //     this.volver();
-    //   },
-    //   err => console.log(err)
-    // );
   }
 
   searchRUC(ruc: string) {
     if (ruc == null || ruc.toString().length < 11) {
       console.log('error', 'CEABE', 'Se debe ingresar un RUC válido');
+      this.rucError.title = 'RUC erroneo:';
+      this.rucError.message = 'Ingrese un RUC válido';
+      this.rucError.status = true;
     } else {
-      this.ruc = ruc;
       this.loading = true;
-      this.userService.searchByRUC(ruc).subscribe((dataItem) => {
-        if (dataItem.codigo >= 1) {
-          this.supplier.businessName = dataItem.dato.razonSocial
-        } else {
-          console.log('error', 'CEABE', dataItem.msj);
-        }
-        this.loading = false;
-      });
+      this.rucError.status = false;
+      // this.userService.searchByRUC(ruc).subscribe((dataItem) => {
+      //   console.log(dataItem)
+      //   if (dataItem.codigo >= 1) {
+      //     this.businessName = dataItem.dato.razonSocial
+      //     this.ruc = ruc
+      //     this.formSupplier.value.businessName = dataItem.dato.razonSocial
+      //   } else {
+      //     console.log('error', 'CEABE', dataItem.msj);
+      //   }
+      //   this.loading = false;
+      // });
+
+      this.userService.searchRUC()
+        .subscribe(items => {
+          let sunat = undefined
+          items.map(function (item) {
+
+            if (item.ruc == ruc) {
+              console.log(item)
+              sunat = item
+              return;
+            }
+          })
+
+          if (sunat !== undefined) {
+            this.businessName = sunat.name
+            this.ruc = sunat.ruc
+            this.formSupplier.value.businessName = sunat.name
+          } else {
+            this.rucError.title = 'RUC no encontrado:';
+            this.rucError.message = 'No pudimos encontrar tu RUC corrigelo y vuelve a intentarlo';
+            this.rucError.status = true;
+          }
+        });
     }
   }
 
   loadCategoryList() {
     this.userService.getCategoryList({}).subscribe((dataItem) => {
-      console.log(dataItem)
       if (dataItem.codigo >= 1) {
         dataItem.dato.forEach((item) => {
           this.categoryList.push(new Category(item.id, item.nombre, item.total))
         });
-        // this.categoryList = dataItem.dato;
       } else {
         console.log('error', 'CEABE', 'Se produjo un error');
       }
     });
   }
 
-  volver(): void {
-    this.router.navigate(['/']);
+  onSuccessRegister(): void {
+    window.location.href = 'http://localhost:4200/';
   }
 
-  showResponse(event) {
-    if (event.response.length > 0) {
-      this.captcha = true;
-    } else {
-      this.captcha = false;
-    }
+  public onSuccessCaptcha(captchaResponse: string): void {
+    // this.formSupplier.value.captcha = 'true'
+    this.captcha = true;
   }
 
-  expireCaptchaShow(event) {
+  public onErrorCaptcha(errorDetails: RecaptchaErrorParameters): void {
+    // this.formSupplier.value.captcha = ''
     this.captcha = false;
-  }
-
-  public resolved(captchaResponse: string): void {
-    console.log(`Resolved captcha with response: ${captchaResponse}`);
-  }
-
-  public onError(errorDetails: RecaptchaErrorParameters): void {
-    console.log(`reCAPTCHA error encountered; details:`, errorDetails);
   }
 
   openAll() {
@@ -136,7 +207,5 @@ export class SignupComponent implements OnInit {
     console.log(this.activeIds);
   }
 
-  addContact() {
-    this.contacts.push(new Contact())
-  }
+
 }
