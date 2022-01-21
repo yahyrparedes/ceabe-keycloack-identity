@@ -16,16 +16,8 @@ export class SignupComponent implements OnInit {
 
   activeIds: string[] = ['categories', 'supplier', 'representative'];
   ruc: string = "";
-  rucError = {
-    status: false,
-    title: '',
-    message: ''
-  }
-  categoryError = {
-    status: false,
-    title: '',
-    message: ''
-  }
+  rucError = {status: false, title: '', message: ''}
+  categoryError = {status: false, title: '', message: ''}
   businessName: string = "";
   loading: boolean;
   categoryList: Category[] = [];

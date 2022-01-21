@@ -25,15 +25,16 @@ export class AppComponent implements OnInit {
   constructor(private oauthService: OAuthService,
               private sessionService: SessionService,
               private loginService: LoginService,) {
-
+    this.configure();
   }
 
   authConfig: AuthConfig = {
     issuer: environment.keycloak,
-    redirectUri: location.origin,
+    redirectUri: window.location.origin + '/profile',
     clientId: 'ceabe-client-auth',
     responseType: 'code',
     scope: 'openid profile email offline_access',
+    sessionChecksEnabled: true,
     showDebugInformation: true,
   };
 
@@ -42,8 +43,10 @@ export class AppComponent implements OnInit {
     this.oauthService.configure(this.authConfig);
     this.oauthService.tokenValidationHandler = new NullValidationHandler();
     this.oauthService.setupAutomaticSilentRefresh();
-    this.oauthService.loadDiscoveryDocument().then(() => this.oauthService.tryLogin())
+
+    this.oauthService.loadDiscoveryDocumentAndLogin()
       .then(() => {
+        console.log('validation sesion')
         if (this.oauthService.getIdentityClaims()) {
           console.log(this.oauthService.getIdentityClaims())
           console.log(this.oauthService.loadUserProfile())
@@ -53,6 +56,8 @@ export class AppComponent implements OnInit {
           this.token = this.loginService.getToken();
           this.username = this.loginService.getUsername();
           this.sessionService.session(this.isLogged, this.username, this.name);
+        } else {
+          console.log('sin session')
         }
       }, (error) => {
         console.log({error});
@@ -60,7 +65,29 @@ export class AppComponent implements OnInit {
           location.reload();
         }
       });
-    //Suscribe to token events
+
+    // this.oauthService.loadDiscoveryDocument().then(() => this.oauthService.tryLogin())
+    //   .then(() => {
+    //     console.log('validate')
+    //     if (this.oauthService.getIdentityClaims()) {
+    //       console.log(this.oauthService.getIdentityClaims())
+    //       console.log(this.oauthService.loadUserProfile())
+    //       this.isLogged = this.loginService.getIsLogged();
+    //       this.isAdmin = this.loginService.getIsAdmin();
+    //       this.name = this.loginService.getName();
+    //       this.token = this.loginService.getToken();
+    //       this.username = this.loginService.getUsername();
+    //       this.sessionService.session(this.isLogged, this.username, this.name);
+    //     }else {
+    //      console.log('sin session')
+    //      }
+    //   }, (error) => {
+    //     console.log({error});
+    //     if (error.status === 400) {
+    //       location.reload();
+    //     }
+    //   });
+    // Suscribe to token events
     // Falta testearlo por que genera un bucle
     // this.oauthService.events
     //   .pipe(filter((e: any) => e.type === "token_received"))
