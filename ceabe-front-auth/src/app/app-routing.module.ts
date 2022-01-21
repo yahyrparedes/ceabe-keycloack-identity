@@ -9,7 +9,7 @@ import {SupplierGuard} from "./guards/supplier.guard";
 const routes: Routes = [
   {path: '', redirectTo: 'profile', pathMatch: 'full'},
   {path: 'register', component: SignupComponent, canActivate: [SignupGuard]},
-  {path: 'profile', component: ProfileComponent, canActivate: [SupplierGuard] /*, data: {requiredRoles: ['admin']}*/},
+  {path: 'profile', component: ProfileComponent /*, data: {requiredRoles: ['admin']}*/},
   // {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
