@@ -35,9 +35,6 @@
                 <ngb-panel [id]="activeIds[0]">
                   <ng-template ngbPanelTitle>
                     <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex mx-2"><i style="font-weight: bold; color: #1c2128;"
-                                                  class="fa fa-angle-down"></i>
-                      </div>
                       <div class="d-flex" style="font-weight: bold; color: #1c2128;">Categorias</div>
                     </div>
                   </ng-template>
@@ -52,9 +49,12 @@
                           </label>
                         </div>
                       </div>
-<!--                      <ngb-alert [type]="'danger'" *ngIf="rucError.status" [dismissible]="false">-->
-<!--                        <strong>{{rucError.title}}</strong> {{rucError.message}}-->
-<!--                      </ngb-alert>-->
+                      <br/>
+                      <div class="col-6">
+                        <ngb-alert [type]="'danger'" *ngIf="categoryError.status" [dismissible]="false">
+                          <strong>{{categoryError.title}}</strong> {{categoryError.message}}
+                        </ngb-alert>
+                      </div>
                     </div>
                   </ng-template>
                 </ngb-panel>
@@ -134,8 +134,7 @@
               </ngb-accordion>
               <br>
               <div class="d-flex justify-content-center">
-                <re-captcha (resolved)="onSuccessCaptcha($event)" (error)="onErrorCaptcha($event)"  errorMode="handled"
-                            siteKey="6Lcz1xIdAAAAALCm7x_AWRKAykjLzYKgTQJ0Xjej"></re-captcha>
+                <re-captcha formControlName="captcha"></re-captcha>
               </div>
 
               <br>

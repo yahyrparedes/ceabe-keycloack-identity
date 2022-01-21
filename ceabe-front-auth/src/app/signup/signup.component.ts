@@ -18,15 +18,19 @@ export class SignupComponent implements OnInit {
   ruc: string = "";
   rucError = {
     status: false,
-    title: 'RUC erroneo:',
-    message: 'Ingrese un RUC válido'
+    title: '',
+    message: ''
+  }
+  categoryError = {
+    status: false,
+    title: '',
+    message: ''
   }
   businessName: string = "";
   loading: boolean;
   categoryList: Category[] = [];
   categorySelect: Category[] = [];
   contacts: Contact[] = [new Contact(),]
-  captcha: boolean = false;
   public formSupplier: FormGroup;
 
   constructor(private userService: UserService, private router: Router,
@@ -42,7 +46,7 @@ export class SignupComponent implements OnInit {
       cellphone: ['', [Validators.required, Validators.minLength(3)]],
       categories: new FormArray([]),
       contacts: new FormArray([]),
-      // captcha: ['', [Validators.required]]
+      captcha: new FormControl('', [Validators.required])
     })
 
     this.loadCategoryList();
@@ -107,13 +111,16 @@ export class SignupComponent implements OnInit {
     });
     this.formSupplier.value.categories = this.categorySelect
 
-    if (!this.captcha) {
-      console.log('error', 'CEABE', 'Se debe validar el captcha para registrarse.');
-    } else if (!this.formSupplier.valid) {
-      console.log('error', 'CEABE', 'Se deben proporcionar todos los campos requeridos.');
-    } else if (this.businessName == null || this.businessName.length == 0) {
+    if (this.businessName == null || this.businessName.length == 0) {
+      this.rucError.title = 'RUC vacio:';
+      this.rucError.message = 'Para poder registrarte tienes que validar tu RUC.';
+      this.rucError.status = true;
+
       console.log('error', 'CEABE', 'Se debe buscar un ruc.');
     } else if (this.categorySelect.length == 0) {
+      this.categoryError.title = 'Categoria Vacio:';
+      this.categoryError.message = 'Para poder registrarte tienes que seleccionar una categoria.';
+      this.categoryError.status = true;
       console.log('error', 'CEABE', 'Se deben seleccionar categorias.');
     } else {
       let data = {
@@ -139,6 +146,7 @@ export class SignupComponent implements OnInit {
     } else {
       this.loading = true;
       this.rucError.status = false;
+
       // this.userService.searchByRUC(ruc).subscribe((dataItem) => {
       //   console.log(dataItem)
       //   if (dataItem.codigo >= 1) {
@@ -190,16 +198,6 @@ export class SignupComponent implements OnInit {
 
   onSuccessRegister(): void {
     window.location.href = 'http://localhost:4200/';
-  }
-
-  public onSuccessCaptcha(captchaResponse: string): void {
-    // this.formSupplier.value.captcha = 'true'
-    this.captcha = true;
-  }
-
-  public onErrorCaptcha(errorDetails: RecaptchaErrorParameters): void {
-    // this.formSupplier.value.captcha = ''
-    this.captcha = false;
   }
 
   openAll() {
