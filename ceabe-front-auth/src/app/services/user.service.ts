@@ -11,7 +11,7 @@ import {animate} from "@angular/animations";
 export class UserService {
 
 
-  httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+  // httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
 
   constructor(private httpClient: HttpClient) {
   }
@@ -28,10 +28,12 @@ export class UserService {
     return this.httpClient.post<any>(environment.service + "/api/supplier/register/", dato);
   }
 
-
   public searchRUC(): Observable<any> {
-
     return this.httpClient.get<any>('./assets/data/sunat.json');
-
   }
+
+  public getProfileSupplier(ruc): Observable<any> {
+    return this.httpClient.get<any>(environment.service + "/api/supplier/" + ruc,);
+  }
+
 }

@@ -139,40 +139,41 @@ export class SignupComponent implements OnInit {
       this.loading = true;
       this.rucError.status = false;
 
-      // this.userService.searchByRUC(ruc).subscribe((dataItem) => {
-      //   console.log(dataItem)
-      //   if (dataItem.codigo >= 1) {
-      //     this.businessName = dataItem.dato.razonSocial
-      //     this.ruc = ruc
-      //     this.formSupplier.value.businessName = dataItem.dato.razonSocial
-      //   } else {
-      //     console.log('error', 'CEABE', dataItem.msj);
-      //   }
-      //   this.loading = false;
-      // });
+      this.userService.searchByRUC(ruc).subscribe((dataItem) => {
+        console.log(dataItem)
+        if (dataItem.codigo >= 1) {
+          this.businessName = dataItem.dato.razonSocial
+          this.ruc = ruc
+          this.formSupplier.value.businessName = dataItem.dato.razonSocial
+        } else {
+          this.rucError.title = 'RUC no encontrado:';
+          this.rucError.message = 'No pudimos encontrar tu RUC corrigelo y vuelve a intentarlo';
+          this.rucError.status = true;
+        }
+        this.loading = false;
+      });
 
-      this.userService.searchRUC()
-        .subscribe(items => {
-          let sunat = undefined
-          items.map(function (item) {
-
-            if (item.ruc == ruc) {
-              console.log(item)
-              sunat = item
-              return;
-            }
-          })
-
-          if (sunat !== undefined) {
-            this.businessName = sunat.name
-            this.ruc = sunat.ruc
-            this.formSupplier.value.businessName = sunat.name
-          } else {
-            this.rucError.title = 'RUC no encontrado:';
-            this.rucError.message = 'No pudimos encontrar tu RUC corrigelo y vuelve a intentarlo';
-            this.rucError.status = true;
-          }
-        });
+      // this.userService.searchRUC()
+      //   .subscribe(items => {
+      //     let sunat = undefined
+      //     items.map(function (item) {
+      //
+      //       if (item.ruc == ruc) {
+      //         console.log(item)
+      //         sunat = item
+      //         return;
+      //       }
+      //     })
+      //     if (sunat !== undefined) {
+      //       this.businessName = sunat.name
+      //       this.ruc = sunat.ruc
+      //       this.formSupplier.value.businessName = sunat.name
+      //     } else {
+      //       this.rucError.title = 'RUC no encontrado:';
+      //       this.rucError.message = 'No pudimos encontrar tu RUC corrigelo y vuelve a intentarlo';
+      //       this.rucError.status = true;
+      //     }
+      //   });
     }
   }
 
