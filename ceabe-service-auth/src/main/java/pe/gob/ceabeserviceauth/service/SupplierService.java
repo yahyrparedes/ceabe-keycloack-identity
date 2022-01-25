@@ -19,6 +19,10 @@ public class SupplierService {
         return supplierRepository.save(supplier);
     }
 
+    public Optional<Supplier> findById(long id) {
+        return supplierRepository.findById(id);
+    }
+
     public List<Supplier> list() {
         return supplierRepository.findAll();
     }
@@ -27,8 +31,16 @@ public class SupplierService {
         supplierRepository.delete(supplier);
     }
 
-    public Optional<Supplier> detail(Long id) {
-        return supplierRepository.findById(id);
+    public Optional<Supplier> findByRuc(String ruc) {
+        return supplierRepository.findByRuc(ruc);
     }
 
+    public Supplier update(Supplier supplier) {
+//        return supplierRepository.u
+        return null;
+    }
+
+    public Supplier save(Supplier supplier) {
+        return supplierRepository.save(supplier);
+    }
 }

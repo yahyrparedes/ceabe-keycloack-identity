@@ -1,5 +1,6 @@
 package pe.gob.ceabeserviceauth.controller;
 
+import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 import org.springframework.http.HttpStatus;
 import pe.gob.ceabeserviceauth.dto.ResponseKeycloak;
 import pe.gob.ceabeserviceauth.model.Category;
@@ -11,13 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.gob.ceabeserviceauth.service.SupplierService;
 
+import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-
-@RestController
 @CrossOrigin
+@RestController
 @RequestMapping("api/supplier")
 public class SupplierController {
 
@@ -43,23 +45,16 @@ public class SupplierController {
 //            }
 //            supplier.setCategories(categories);
 
-            Supplier temporal = supplierService.create(supplier);
+            supplierService.create(supplier);
 
             try {
                 return ResponseEntity.status(responseKeycloak.getStatus()).body(responseKeycloak);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-
-//            System.out.println(supplier.ruc + " " + supplier.email + " " + supplier.businessName + " " + supplier.representative + " " + supplier.ruc);
-//            for (Category category : supplier.categories) {
-//                System.out.println(category.getCode() + " " + category.getName());
-//            }
         } else {
             return ResponseEntity.status(responseKeycloak.getStatus()).body(responseKeycloak);
         }
-
-
     }
 
     @GetMapping("/list")
@@ -67,36 +62,37 @@ public class SupplierController {
         return supplierService.list();
     }
 
-}
-//{
-//    "categorias": [
-//        {
-//            "total": 0,
-//            "id": 6,
-//            "nombre": "INSUMO DE LABORATORIO"
-//        },
-//        {
-//            "total": 0,
-//            "id": 5,
-//            "nombre": "EQUIPAMIENTO COMPLEMENTARIO"
-//        },
-//        {
-//            "total": 0,
-//            "id": 1,
-//            "nombre": "PRODUCTO FARMACEUTICO"
-//        },
-//        {
-//            "total": 0,
-//            "id": 2,
-//            "nombre": "DISPOSITIVO MEDICO"
-//        }
-//    ],
-//    "ruc": "10738840718", //username
-//    "razonSocial": "PAREDES ARTEAGA YAHYR ENRIQUE",
-//    "correo": "demo@assdas.co",
-//    "representante": "sasdf",
-//    "telefono": "132546897",
-//    "celular": "321546789"
-//}
+    @PutMapping("/{ruc}")
+    public ResponseEntity<Supplier> update(@PathVariable("ruc") String ruc, @RequestBody Supplier body) {
 
+        Optional<Supplier> data = supplierService.findByRuc(ruc);
+        if (data.isPresent()) {
+            Supplier _supplier = data.get();
+            _supplier.setEmail(body.getEmail());
+            _supplier.setRepresentative(body.getRepresentative());
+            _supplier.setPhone(body.getPhone());
+            _supplier.setCellphone(body.getCellphone());
+
+            // Category
+            _supplier.setCategories(body.getCategories());
+
+            // Contacts
+            _supplier.setContacts(body.getContacts());
+
+            return ResponseEntity.status(HttpStatus.OK).body(supplierService.save(_supplier));
+        }
+
+        return ResponseEntity.status(400).build();
+    }
+
+//    @RolesAllowed("ceabe-user")
+    @GetMapping("/{ruc}")
+    public ResponseEntity<Supplier> detail(@PathVariable("ruc") String ruc) {
+//        Optional<Supplier> supplier = supplierService.findByRuc(ruc);
+        return supplierService.findByRuc(ruc)
+                .map(value -> ResponseEntity.status(200).body(value))
+                .orElseGet(() -> ResponseEntity.status(400).build());
+    }
+
+}
 
