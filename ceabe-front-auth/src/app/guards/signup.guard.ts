@@ -7,15 +7,15 @@ import {LoginService} from "../services/login.service";
 })
 export class SignupGuard implements CanActivate {
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private loginService: LoginService, private router: Router) {
+  }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.loginService.getIsLogged()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/profile']);
       return false;
     }
     return true;
   }
-
 
 }

@@ -4,7 +4,6 @@ export class Contact {
   public email: string;
   public position: string;
   public phone: string;
-  public index: number;
 
   // @ts-ignore
   // constructor(index: number) {

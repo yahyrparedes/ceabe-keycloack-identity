@@ -40,7 +40,8 @@
                   </ng-template>
                   <ng-template ngbPanelContent>
                     <div class="row">
-                      <div class="col-4" *ngFor="let category of categoryList; let i=index">
+                      <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12"
+                           *ngFor="let category of categoryList; let i=index">
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" [value]="category.code"
                                  [name]="category.name" (change)="onCategoryChange($event)">
@@ -136,7 +137,6 @@
               <div class="d-flex justify-content-center">
                 <re-captcha formControlName="captcha"></re-captcha>
               </div>
-
               <br>
               <div class="row">
                 <div class="col-3"></div>
@@ -146,7 +146,6 @@
                   </button>
                 </div>
                 <div class="col-3"></div>
-
               </div>
             </form>
           </div>

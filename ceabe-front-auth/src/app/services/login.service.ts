@@ -16,7 +16,7 @@ export class LoginService {
   }
 
   public logout(): void {
-    this.oauthService.logOut();
+    this.oauthService.revokeTokenAndLogout().then(info => console.log(info));
   }
 
   public getToken(): string {
@@ -47,7 +47,6 @@ export class LoginService {
     const payload = token.split('.')[1];
     const payloadDecodedJson = atob(payload);
     const payloadDecoded = JSON.parse(payloadDecodedJson);
-    console.log(payloadDecoded)
     return payloadDecoded.realm_access.roles.indexOf('realm-admin') !== -1;
   }
 }

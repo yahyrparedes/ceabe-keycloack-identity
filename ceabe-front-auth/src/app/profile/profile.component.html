@@ -1,159 +1,104 @@
-<div class="container">
-  <div class="card  ">
-    <div class="card-header">
-      Mi Perfil
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">{{username}}</h5>
-      <p class="card-text">{{businessName}}</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-    <div class="card-footer text-muted">
-      2 days ago
-    </div>
-  </div>
-</div>
-
+<br/>
+<br/>
+<br/>
 <div class="container">
   <div class="card-header d-flex align-items-center">
-    <div class="col-3 flex flex-column">
-      <span><b>Acme S.R.L</b></span>
-      <span><b> RUC: </b>123456789</span>
+
+    <div class="col-1 flex flex-column">
+
+      <a class="btn   btn-floating btn-lg"  href="http://localhost:4200/#/dashboard" role="button">
+        <i class="far fa-2x fa-arrow-alt-circle-left"></i>
+      </a>
     </div>
-    <div class="col-6 text-center">
+    <div class="col-4 flex flex-column">
+      <span><b>{{businessName}}</b></span><br/>
+      <span><b> RUC: </b>{{username}}</span>
+    </div>
+    <div class="col-4 text-center">
       <strong class="title-profile">Perfil Proveedor</strong>
     </div>
     <div class="col-3 d-flex justify-content-end">
-      <button class="button btn-primary" icon="fas fas-save">Guardar</button>
+      <button class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
     </div>
   </div>
-  <hr />
+  <br/>
+  <form (ngSubmit)="onUpdateSupplier()" [formGroup]="formSupplier">
+    <div class="card mb-md-3">
+      <div class="card-header" style="background-color: #DCDCDC;">Categorias
+        <!--      <h5 class="card-title">Categorias</h5>-->
+      </div>
+      <div class="card-body row">
+        <div class="row">
+          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12"
+               *ngFor="let category of categoryList; let i=index">
+            <div class="form-check">
+              <input class="form-check-input" checked type="checkbox" [value]="category.code"
+                     [name]="category.name">
+              <label>
+                <span class=" pl-2"> {{  category.name }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="card mb-3">
-    <div class="card-header">
-      <span>Categorias</span>
-    </div>
-    <div class="card-body p-4 d-flex">
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <input type="checkbox" name="g1" />
-        <label>
-          <span class=" pl-2">Item</span>
-        </label>
+    <div class="card mb-md-3">
+      <div class="card-header" style="background-color: #DCDCDC;">
+        Datos del usuario
       </div>
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <input type="checkbox" name="g1" />
-        <label>
-          <span class=" pl-2">Item</span>
-        </label>
-      </div>
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <input type="checkbox" name="g1" />
-        <label>
-          <span class=" pl-2">Item</span>
-        </label>
-      </div>
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-        <input type="checkbox" name="g1" />
-        <label>
-          <span class=" pl-2">Item</span>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <div class="card mb-3">
-    <div class="card-header">
-      <span>Datos del usuario</span>
-    </div>
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col">
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col">
           <span class="form-group">
             <label>Correo Electronico</label>
-            <input type="text" class="form-control" />
-  
+            <input formControlName="email" type="text" class="form-control"/>
+
           </span>
-        </div>
-        <div class="col">
+          </div>
+          <div class="col">
           <span class="form-group">
             <label>Representante legal</label>
-            <input type="text" class="form-control" />
-            
+            <input formControlName="representative" type="text" class="form-control"/>
+
           </span>
+          </div>
         </div>
-      </div>
-     <div class="row mb-3">
-      <div class="col">
+        <div class="row mb-3">
+          <div class="col">
         <span class="form-group">
           <label>Telefono</label>
-          <input type="text" class="form-control" />
-       
+          <input formControlName="phone" type="text" class="form-control"/>
+
         </span>
-      </div>
-      <div class="col">
+          </div>
+          <div class="col">
         <span class="form-group">
           <label>Celular</label>
-          <input type="text" class="form-control" />
-    
+          <input formControlName="cellphone" type="text" class="form-control"/>
+
         </span>
-      </div>
-     </div>
-    </div>
-  </div>
-
-  <div class="card mb-3">
-    <div class="card-header">
-      <span>Contacto</span>
-    </div>
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col">
-          <span class="form-group">
-            <label>Nombres</label>
-            <input type="text" class="form-control" />
-  
-          </span>
+          </div>
         </div>
-        <div class="col">
-          <span class="form-group">
-            <label>Apellidos</label>
-            <input type="text" class="form-control" />
-  
-          </span>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <span class="form-group">
-            <label>Cargo</label>
-            <input type="text" class="form-control" />
-     
-          </span>
-        </div>
-        <div class="col">
-          <span class="form-group">
-            <label>Telefono</label>
-            <input type="text" class="form-control" />
-  
-          </span>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <span class="form-group">
-            <label>Correo Electronico</label>
-            <input type="text" class="form-control" />
-  
-          </span>
-        </div>
-        <div class="col">
-
-        </div>
-      </div>
-
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center pt-4">
-        <button class="btn btn-primary">Agregar nuevo contacto</button>
       </div>
     </div>
-  </div>
+
+    <div class="card mb-md-3">
+      <div class="card-header" style="background-color: #DCDCDC;">
+        Contacto
+      </div>
+      <div class="card-body">
+        <app-contact *ngFor="let contact of contacts; let i = index"
+                     (sendFormEmitter)="sendFormEmitter($event)"
+                     (registerFormEmitter)="registerFormEmitter($event)"
+                     (removeFormEmitter)="removeFormEmitter($event)"
+                     title="Contacto #{{i+1}}" [index]="i" [contact]="contact"></app-contact>
+
+
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center pt-4">
+          <button class="btn btn-primary" (click)="addContact()">Agregar nuevo contacto</button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

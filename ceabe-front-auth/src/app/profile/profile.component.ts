@@ -5,6 +5,10 @@ import {UserService} from "../services/user.service";
 import {AuthConfig, NullValidationHandler, OAuthService} from "angular-oauth2-oidc";
 import {environment} from "../../environments/environment";
 import {filter} from "rxjs";
+import {Category} from "../models/category";
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {getProjectTargetOptions} from "@angular/cdk/schematics";
+import {Contact} from "../models/contact";
 
 @Component({
   selector: 'app-profile',
@@ -13,93 +17,96 @@ import {filter} from "rxjs";
 })
 export class ProfileComponent implements OnInit {
 
-  isLogged: boolean;
   username: string;
   businessName: String;
+
+  categoryList: Category[] = []
+  public formSupplier: FormGroup;
+  contacts: Contact[] = []
 
   constructor(private loginService: LoginService,
               private userService: UserService,
               private oauthService: OAuthService,
-              private router: Router) {
-    this.configure();
+              private router: Router,
+              private formBuilder: FormBuilder) {
   }
 
+  ngOnInit(): void {
+    this.formSupplier = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      representative: ['', [Validators.required, Validators.minLength(3)]],
+      phone: ['', [Validators.required, Validators.minLength(3)]],
+      cellphone: ['', [Validators.required, Validators.minLength(3)]],
+      categories: new FormArray([]),
+      contacts: new FormArray([]),
+    })
 
-  authConfig: AuthConfig = {
-    issuer: environment.keycloak,
-    redirectUri: window.location.origin + '/profile',
-    clientId: 'ceabe-client-auth',
-    responseType: 'code',
-    scope: 'openid profile email offline_access',
-    sessionChecksEnabled: true,
-    showDebugInformation: true,
-  };
-
-  configure(): void {
-    console.log("configure")
-    this.oauthService.configure(this.authConfig);
-    this.oauthService.tokenValidationHandler = new NullValidationHandler();
-    this.oauthService.setupAutomaticSilentRefresh();
 
     this.oauthService.loadDiscoveryDocumentAndLogin()
       .then(() => {
         if (this.oauthService.getIdentityClaims()) {
-          // console.log(this.oauthService.getIdentityClaims())
-          // console.log(this.oauthService.loadUserProfile())
-          this.isLogged = this.loginService.getIsLogged();
           this.username = this.loginService.getUsername();
           this.businessName = this.loginService.getName();
-        }
-      }, (error) => {
-        console.log({error});
-        if (error.status === 400) {
-          location.reload();
+          this.userService.getProfileSupplier(this.username).subscribe(profile => {
+            this.categoryList = profile.categories
+            this.formSupplier.patchValue({
+              email: profile.email,
+              representative: profile.representative,
+              phone: profile.phone,
+              cellphone: profile.cellphone,
+
+            });
+            this.contacts = profile.contacts
+          });
         }
       });
-
-    // this.oauthService.loadDiscoveryDocument().then(() => this.oauthService.tryLogin())
-    //   .then(() => {
-    //     console.log('validate')
-    //     if (this.oauthService.getIdentityClaims()) {
-    //       console.log(this.oauthService.getIdentityClaims())
-    //       console.log(this.oauthService.loadUserProfile())
-    //       this.isLogged = this.loginService.getIsLogged();
-    //       this.isAdmin = this.loginService.getIsAdmin();
-    //       this.name = this.loginService.getName();
-    //       this.token = this.loginService.getToken();
-    //       this.username = this.loginService.getUsername();
-    //       this.sessionService.session(this.isLogged, this.username, this.name);
-    //     }else {
-    //      console.log('sin session')
-    //      }
-    //   }, (error) => {
-    //     console.log({error});
-    //     if (error.status === 400) {
-    //       location.reload();
-    //     }
-    //   });
-
-
-
-  }
-
-  ngOnInit(): void {
-    this.isLogged = this.loginService.getIsLogged();
-    this.businessName = this.loginService.getName();
-    this.username = this.loginService.getUsername();
-
-    if (this.isLogged == true) {
-      console.log("user is logged")
-
-      this.userService.getProfileSupplier(this.username).subscribe(response => {
-        console.log(response)
-      });
-    }
 
     this.oauthService.events.pipe(filter(e => e.type === 'session_terminated')).subscribe(e => {
       console.debug('Your session has been terminated!');
     })
 
+    // this.userService.getProfileSupplier(this.username).subscribe( profile => {
+    //  console.log(profile)
+    //   this.categoryList = profile.categories
+    // })
+
+  }
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.formSupplier.controls;
+  }
+
+
+  onUpdateSupplier() {
+
+  }
+
+  sendFormEmitter(event) {
+    const formArray: FormArray = this.formSupplier.get('contacts') as FormArray;
+    formArray.controls[event.value.index] = event;
+  }
+
+  registerFormEmitter(event) {
+    const formArray: FormArray = this.formSupplier.get('contacts') as FormArray;
+    formArray.push(event);
+  }
+
+  removeFormEmitter(event) {
+    const formArray: FormArray = this.formSupplier.get('contacts') as FormArray;
+
+    let i: number = 0;
+    formArray.controls.forEach((group: FormGroup) => {
+      if (group.value.index == event.value.index) {
+        formArray.removeAt(i);
+        return;
+      }
+      i++;
+    });
+    this.contacts.splice(i, 1);
+  }
+
+  addContact() {
+    this.contacts.push(new Contact())
   }
 
 }

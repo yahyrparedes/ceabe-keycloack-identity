@@ -18,7 +18,6 @@ export class ContactComponent implements OnInit {
   @Output() removeFormEmitter = new EventEmitter<FormGroup>();
 
   constructor(private formBuilder: FormBuilder) {
-
   }
 
   ngOnInit(): void {
@@ -30,6 +29,13 @@ export class ContactComponent implements OnInit {
       phone: ['', [Validators.required]],
       index: [this.index, [Validators.required]],
     })
+    this.formContact.patchValue({
+      name: this.contact.name,
+      lastName: this.contact.lastName,
+      email: this.contact.email,
+      position: this.contact.position,
+      phone: this.contact.phone,
+    });
     this.registerForm();
   }
 

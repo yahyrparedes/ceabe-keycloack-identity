@@ -1,25 +1,7 @@
-// export class Proveedor {
-//   razonSocial: string
-//   estadoContribuyente: string
-//   tipoContribuyente: string
-//   condicionContribuyente: string
-//   nombreComercial: string
-//   fechaInscripcion: string
-//   fechaInicio: string
-//   domicilio: string
-// }
 import {required, maxLength, minLength, email, numeric, NumericValueType, prop} from "@rxweb/reactive-form-validators";
 import {Constants} from "../utils/constants";
 
 export class Supplier {
-  businessName: string = ""
-  taxpayerStatus: string
-  taxpayerType: string
-  taxpayerCondition: string
-  tradename: string
-  registrationDate: string
-  startDate: string
-  addresses: string
 
 }
 

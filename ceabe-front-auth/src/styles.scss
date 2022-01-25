@@ -1,33 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
-/* You can add global styles to this file, and also import other style files */
-html {
-  height: 100%;
-  font-size: 14px;
-}
-body {
-  height: 100%;
-  margin: 0px;
-}
-
-.container {
-  padding: 40px 20px 40px 20px;
-}
-
-.red {
-  color: #dc3545;
-}
-.green {
-  color: #45b145;
-}
-.blue {
-  color: #007bff;
-}
-.gray {
-  color: gray;
-}
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';

@@ -1,10 +1,10 @@
-import {UserService} from './../services/user.service';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Category} from "../models/category";
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Contact} from "../models/contact";
-import {RecaptchaErrorParameters} from "ng-recaptcha";
+import {UserService} from "../services/user.service";
+import {OAuthService} from "angular-oauth2-oidc";
 
 @Component({
   selector: 'app-signup',
@@ -26,7 +26,7 @@ export class SignupComponent implements OnInit {
   public formSupplier: FormGroup;
 
   constructor(private userService: UserService, private router: Router,
-              private formBuilder: FormBuilder,) {
+              private formBuilder: FormBuilder, private oauthService: OAuthService,) {
   }
 
   ngOnInit(): void {

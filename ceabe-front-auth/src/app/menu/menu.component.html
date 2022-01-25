@@ -1,15 +1,58 @@
-<!--<nav class="navbar   static-top" style="background-color: #285698; ">-->
-<nav class="navbar navbar-expand-sm navbar-light  " style="background-color: #285698; ">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg" style="background-color: #285698; ">
+  <div class="container">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
 
-  <div class=" container">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <a class="navbar-brand mt-2 mt-lg-0" href="#">
+        <img
+          src="assets/img/logo.png"
+          height="40px"
+          loading="lazy"
+        />
+      </a>
 
-    <a class="navbar-brand" href="#">
-      <img src="assets/img/logo.png" alt="#" height="40px">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!--        <li class="nav-item">-->
+        <!--          <a class="nav-link" href="#">Dashboard</a>-->
+        <!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--          <a class="nav-link" href="#">Team</a>-->
+        <!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--          <a class="nav-link" href="#">Projects</a>-->
+        <!--        </li>-->
+      </ul>
+      <!-- Left links -->
+    </div>
+    <!-- Collapsible wrapper -->
 
-    </a>
-    <a class="navbar-brand" href="#">
-      <img src="assets/img/Logo-Ceabe-Aprobado-2.png" alt="#" height="40px">
-    </a>
+    <div class="d-flex align-items-center">
+      <button *ngIf="!isLogged" type="button" (click)="login()" class="btn btn-success me-3 text-capitalize ">
+        <i class="far fa-user"></i> <small> Iniciar Sesion </small>
+      </button>
+      <button *ngIf="isLogged" type="button" (click)="logout()" class="btn btn-danger me-3 text-capitalize ">
+        <i class="fas fa-sign-out-alt"></i><small>Cerrar Session</small>
+      </button>
+
+      <a class="navbar-brand mt-2 mt-lg-0" href="#">
+        <img
+          src="assets/img/Logo-Ceabe-Aprobado-2.png"
+          height="40"
+          alt="Black and White Portrait of a Man"/>
+      </a>
+
+    </div>
   </div>
 </nav>
-
