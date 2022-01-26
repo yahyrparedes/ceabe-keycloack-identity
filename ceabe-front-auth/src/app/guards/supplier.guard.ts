@@ -20,9 +20,8 @@ export class SupplierGuard implements CanActivate {
       // this.loginService.login();
       return false;
     }
-    const realRol = this.loginService.getIsAdmin() ? 'admin' : 'user';
+    const realRol = this.loginService.getIsAdmin() ? 'admin' : 'supplier';
     if (requiredRoles.indexOf(realRol) === -1) {
-      console.log('if two')
       // this.router.navigate(['/']);
       return false;
     }
