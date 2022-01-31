@@ -30,6 +30,7 @@ import {MdbTabsModule} from 'mdb-angular-ui-kit/tabs';
 import {MdbTooltipModule} from 'mdb-angular-ui-kit/tooltip';
 import {MdbValidationModule} from 'mdb-angular-ui-kit/validation';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ModalSignupComponent} from "./signup/modal.signup.component";
 
 //https://mdbootstrap.com/
 @NgModule({
@@ -38,7 +39,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MenuComponent,
     SignupComponent,
     ContactComponent,
-    ProfileComponent
+    ProfileComponent,
+    ModalSignupComponent,
   ],
   imports: [
     BrowserModule,

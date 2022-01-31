@@ -1,7 +1,8 @@
-<section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark"
+
+<section class="pt-5 pb-5 mt-0 align-items-center d-flex  "
          style="min-height: 100vh; background-size: cover; background-image: url(https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1920&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=c0d43804e2c7c93143fe8ff65398c8e9);">
   <div class="container-fluid">
-    <div class="row  justify-content-center align-items-center d-flex-row  h-100">
+    <div class="row  justify-content-center ">
       <div class="col-12 col-md-4 col-lg-8">
         <div class="card shadow">
           <div class="card-body">
@@ -30,7 +31,57 @@
             <ngb-alert [type]="'danger'" *ngIf="rucError.status" [dismissible]="false">
               <strong>{{rucError.title}}</strong> {{rucError.message}}
             </ngb-alert>
-            <form (ngSubmit)="onRegisterSupplier()" [formGroup]="formSupplier">
+
+            <form *ngIf="validateAccount == statusAccount.exists" (ngSubmit)="sendReport()"
+                  [formGroup]="formReport">
+              <ngb-accordion #acc="ngbAccordion" [activeIds]="'cuenta_robada'">
+                <ngb-panel [id]="'cuenta_robada'">
+                  <ng-template ngbPanelTitle>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex" style="font-weight: bold; color: #1c2128;">Esta cuenta existe</div>
+                    </div>
+                  </ng-template>
+                  <ng-template ngbPanelContent>
+                    <div class="container">
+                      <div class="row mb-4">
+                        <div class="col">
+                          <input formControlName="fullname" type="text" placeholder="Nombres y Apellidos"
+                                 class="form-control"/>
+                        </div>
+                        <div class="col">
+                          <input formControlName="position" type="text" class="form-control" placeholder="Cargo">
+                        </div>
+                      </div>
+                      <div class="row mb-4">
+                        <div class="col">
+                          <div class="">
+                            <input formControlName="email" type="text" class="form-control" placeholder="Correo">
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="">
+                            <input formControlName="cellphone" type="text" class="form-control" placeholder="Celular">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <textarea formControlName="message" class="form-control" placeholder="Mensaje"
+                                  rows="4"></textarea>
+                      </div>
+                      <div class="d-flex justify-content-center">
+                        <button type="submit" [disabled]="!formReport.valid" class="btn btn-primary">
+                          Generar Solicitud
+                        </button>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-panel>
+              </ngb-accordion>
+            </form>
+
+
+            <form *ngIf="validateAccount == statusAccount.empty" (ngSubmit)="onRegisterSupplier()"
+                  [formGroup]="formSupplier">
               <ngb-accordion #acc="ngbAccordion" [activeIds]="activeIds[0]">
                 <ngb-panel [id]="activeIds[0]">
                   <ng-template ngbPanelTitle>

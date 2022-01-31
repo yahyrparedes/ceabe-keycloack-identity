@@ -5,12 +5,16 @@ import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validat
 import {Contact} from "../models/contact";
 import {UserService} from "../services/user.service";
 import {OAuthService} from "angular-oauth2-oidc";
+import {NgbModal, NgbModalConfig} from '@ng-bootstrap/ng-bootstrap';
+import {ModalSignupComponent} from "./modal.signup.component";
+
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  styleUrls: ['./signup.component.scss'],
 })
+
 
 export class SignupComponent implements OnInit {
 
@@ -24,9 +28,19 @@ export class SignupComponent implements OnInit {
   categorySelect: Category[] = [];
   contacts: Contact[] = [new Contact(),]
   public formSupplier: FormGroup;
+  public formReport: FormGroup;
+
+  validateAccount = ''
+  statusAccount = {
+    empty: 'empty',
+    exists: 'exists',
+  }
 
   constructor(private userService: UserService, private router: Router,
-              private formBuilder: FormBuilder, private oauthService: OAuthService,) {
+              private formBuilder: FormBuilder, private oauthService: OAuthService,
+              config: NgbModalConfig, private modalService: NgbModal) {
+    config.backdrop = 'static';
+    config.keyboard = false;
   }
 
   ngOnInit(): void {
@@ -41,6 +55,13 @@ export class SignupComponent implements OnInit {
       captcha: new FormControl('', [Validators.required])
     })
 
+    this.formReport = this.formBuilder.group({
+      fullname: ['', [Validators.required, Validators.minLength(3)]],
+      position: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      cellphone: ['', [Validators.required, Validators.minLength(3)]],
+      message: ['', [Validators.required, Validators.minLength(3)]],
+    })
     this.loadCategoryList();
   }
 
@@ -48,6 +69,10 @@ export class SignupComponent implements OnInit {
     return this.formSupplier.controls;
   }
 
+  open() {
+    const modalRef = this.modalService.open(ModalSignupComponent);
+    modalRef.componentInstance.name = 'World';
+  }
 
   addContact() {
     this.contacts.push(new Contact())
@@ -138,20 +163,30 @@ export class SignupComponent implements OnInit {
     } else {
       this.loading = true;
       this.rucError.status = false;
-
-      this.userService.searchByRUC(ruc).subscribe((dataItem) => {
-        console.log(dataItem)
-        if (dataItem.codigo >= 1) {
-          this.businessName = dataItem.dato.razonSocial
+      this.userService.getProfileSupplier(ruc)
+        .subscribe((item) => {
+          console.log(item)
+          this.businessName = item.businessName
           this.ruc = ruc
-          this.formSupplier.value.businessName = dataItem.dato.razonSocial
-        } else {
-          this.rucError.title = 'RUC no encontrado:';
-          this.rucError.message = 'No pudimos encontrar tu RUC corrigelo y vuelve a intentarlo';
-          this.rucError.status = true;
-        }
-        this.loading = false;
-      });
+          this.formSupplier.value.businessName = item.businessName
+          this.validateAccount = this.statusAccount.exists
+        }, (error) => {
+          this.userService.searchByRUC(ruc).subscribe((dataItem) => {
+            console.log(dataItem)
+            if (dataItem.codigo >= 1) {
+              this.businessName = dataItem.dato.razonSocial
+              this.ruc = ruc
+              this.formSupplier.value.businessName = dataItem.dato.razonSocial
+              this.validateAccount = this.statusAccount.empty
+            } else {
+              this.validateAccount = ''
+              this.rucError.title = 'RUC no encontrado:';
+              this.rucError.message = 'No pudimos encontrar tu RUC corrigelo y vuelve a intentarlo';
+              this.rucError.status = true;
+            }
+            this.loading = false;
+          });
+        });
 
       // this.userService.searchRUC()
       //   .subscribe(items => {
@@ -199,4 +234,17 @@ export class SignupComponent implements OnInit {
   }
 
 
+  sendReport() {
+    let data = {
+      ruc: this.ruc,
+      ...this.formReport.value
+    }
+
+    this.userService.sendReport(data).subscribe(item => {
+      console.log(item)
+      this.open();
+    }, error => {
+      console.log(error)
+    });
+  }
 }

@@ -36,4 +36,11 @@ export class UserService {
     return this.httpClient.get<any>(environment.service + "/api/supplier/" + ruc,);
   }
 
+  // public validateExistSupplier(ruc): Observable<any> {
+  //   return this.httpClient.get<any>(environment.service + "api/supplier/" + ruc);
+  // }
+
+  public sendReport(data): Observable<any> {
+    return this.httpClient.post<any>(environment.service + "/api/supplier/report", data);
+  }
 }
