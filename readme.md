@@ -13,3 +13,6 @@
 
 1. Execute docker-compose up  
 
+docker exec -it  iam-ceabe-keycloak /bin/bash
+
+

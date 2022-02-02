@@ -52,7 +52,7 @@ public class KeycloakService {
                 usersResource.get(responseKeycloak.getId()).resetPassword(passwordCredential);
 
                 RealmResource realmResource = getRealmResource();
-                RoleRepresentation roleRepresentation = realmResource.roles().get("realm-user").toRepresentation();
+                RoleRepresentation roleRepresentation = realmResource.roles().get("realm-supplier").toRepresentation();
                 realmResource.users().get(responseKeycloak.getId()).roles().realmLevel().add(Arrays.asList(roleRepresentation));
                 responseKeycloak.setMessage("usuario creado con éxito");
                 responseKeycloak.setSuccess(true);

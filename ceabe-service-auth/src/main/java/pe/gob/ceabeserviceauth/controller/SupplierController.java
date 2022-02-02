@@ -4,17 +4,16 @@ import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 import org.springframework.http.HttpStatus;
 import pe.gob.ceabeserviceauth.dto.ResponseKeycloak;
 import pe.gob.ceabeserviceauth.model.Category;
+import pe.gob.ceabeserviceauth.model.Report;
 import pe.gob.ceabeserviceauth.model.Supplier;
 import pe.gob.ceabeserviceauth.model.UserKeycloak;
 import pe.gob.ceabeserviceauth.service.KeycloakService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.gob.ceabeserviceauth.service.ReportService;
 import pe.gob.ceabeserviceauth.service.SupplierService;
 
-import javax.annotation.security.RolesAllowed;
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +28,17 @@ public class SupplierController {
     @Autowired
     private KeycloakService keycloakService;
 
+    @Autowired
+    private ReportService reportService;
+//
+//    @GetMapping("/exists/{ruc}")
+//    public ResponseEntity<Object> exist(@PathVariable("ruc") String ruc) {
+//        Optional<Supplier> data = supplierService.findByRuc(ruc);
+//        if (data.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.OK).body(data.get());
+//        }
+//        return ResponseEntity.status(400).build();
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseKeycloak> create(@RequestBody Supplier supplier) {
@@ -85,14 +95,25 @@ public class SupplierController {
         return ResponseEntity.status(400).build();
     }
 
-//    @RolesAllowed("ceabe-user")
+    //    @RolesAllowed("ceabe-user")
     @GetMapping("/{ruc}")
     public ResponseEntity<Supplier> detail(@PathVariable("ruc") String ruc) {
-//        Optional<Supplier> supplier = supplierService.findByRuc(ruc);
         return supplierService.findByRuc(ruc)
                 .map(value -> ResponseEntity.status(200).body(value))
                 .orElseGet(() -> ResponseEntity.status(400).build());
     }
+
+    @PostMapping("/report")
+    public ResponseEntity<Report> report(@RequestBody Report report) {
+        Report reportNew = reportService.create(report);
+        try {
+            return ResponseEntity.status(201).body(reportNew);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+    }
+
 
 }
 
